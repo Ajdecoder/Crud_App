@@ -2,15 +2,51 @@ import User from "../model/userModal.js";
 
 export const create = async (req, res, next) => {
   try {
-    const userData = new User(req.body);
-    const saveData = await userData.save();
-    res.status(200).json(saveData);
+    let savedData = [];
+
+    if (Array.isArray(req.body)) {
+      for (const data of req.body) {
+        const userData = new User(data);
+        try {
+          const savedItem = await userData.save();
+          savedData.push(savedItem);
+        } catch (error) {
+          handleDuplicateKeyError(res, error);
+          return; 
+        }
+      }
+    } else {
+      const userData = new User(req.body);
+      try {
+        const savedItem = await userData.save();
+        savedData.push(savedItem);
+      } catch (error) {
+        handleDuplicateKeyError(res, error);
+        return; 
+      }
+    }
+
+    res.status(200).json(savedData);
   } catch (err) {
     res.status(500).json({
       message: err.message,
     });
   }
 };
+
+const handleDuplicateKeyError = (res, error) => {
+  if (error.code === 11000 && error.keyPattern) {
+    const field = Object.keys(error.keyPattern)[0];
+    res.status(400).json({
+      message: `${field} must be unique.`,
+    });
+  } else {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 
 export const ReadAll = async (req, res, next) => {
   try {

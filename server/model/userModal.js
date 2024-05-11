@@ -8,10 +8,12 @@ const UserSchema = new mongoose.Schema({
   User_name: {
     type: String,
     required: true,
+    unique: true,
   },
   Address: {
     type: String,
     required: true,
+    unique: true,
   },
   Desc: {
     type: String,

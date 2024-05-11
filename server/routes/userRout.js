@@ -1,5 +1,5 @@
 import express from 'express';
-import {Delete, ReadAll, ReadOne, Update, create} from '../controller/userController.js'
+import {Delete, ReadAll, ReadOne, Update, create} from '../controllers/userController.js'
 
 const route = express.Router();
 
