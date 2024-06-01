@@ -1,12 +1,18 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const AddTask = () => {
+  const navigate = useNavigate();
+
   const [inpvalue, setInpValue] = useState({
-    name: "",
-    username: "",
-    email: "",
-    address: "",
-    description: "",
+    Name: "",
+    User_name: "",
+    Email: "",
+    Address: "",
+    Desc: "",
   });
 
   const handleInputChange = (e) => {
@@ -17,10 +23,22 @@ export const AddTask = () => {
     }));
   };
 
-  const handleAddTask = () => {
-    // Here you can perform the task addition logic with inpvalue data
-    console.log("Task Added:", inpvalue);
-    // Reset input fields after adding the task (optional)
+  const handleAddTask = async (e) => {
+    e.preventDefault();
+
+    try {
+     await axios.post(
+        "http://localhost:8000/api/create",
+        inpvalue
+      );
+      toast.success("Task added successfully!");
+      navigate("/");
+    } catch (error) {
+      console.error("Adding the task failed:", error);
+      toast.error("Failed to add task. Please try again.");
+      navigate("/");
+    }
+
     setInpValue({
       name: "",
       username: "",
@@ -31,7 +49,10 @@ export const AddTask = () => {
   };
 
   return (
-    <form className="w-full max-w-sm flex flex-col m-auto mt-14">
+    <form
+      className="w-full max-w-sm flex flex-col m-auto mt-14"
+      onSubmit={handleAddTask}
+    >
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
           <label
@@ -47,8 +68,8 @@ export const AddTask = () => {
             id="name"
             type="text"
             placeholder="Enter name"
-            name="name"
-            value={inpvalue.name}
+            name="Name"
+            value={inpvalue.Name}
             onChange={handleInputChange}
           />
         </div>
@@ -69,8 +90,8 @@ export const AddTask = () => {
             id="username"
             type="text"
             placeholder="Enter Username"
-            name="username"
-            value={inpvalue.username}
+            name="User_name"
+            value={inpvalue.User_name}
             onChange={handleInputChange}
           />
         </div>
@@ -91,8 +112,8 @@ export const AddTask = () => {
             id="email"
             type="text"
             placeholder="Enter your email"
-            name="email"
-            value={inpvalue.email}
+            name="Email"
+            value={inpvalue.Email}
             onChange={handleInputChange}
           />
         </div>
@@ -113,8 +134,8 @@ export const AddTask = () => {
             id="address"
             type="text"
             placeholder="Enter your Address"
-            name="address"
-            value={inpvalue.address}
+            name="Address"
+            value={inpvalue.Address}
             onChange={handleInputChange}
           />
         </div>
@@ -135,8 +156,8 @@ export const AddTask = () => {
             id="description"
             type="text"
             placeholder="Enter Description"
-            name="description"
-            value={inpvalue.description}
+            name="Desc"
+            value={inpvalue.Desc}
             onChange={handleInputChange}
           />
         </div>
@@ -147,13 +168,13 @@ export const AddTask = () => {
         <div className="md:w-2/3">
           <button
             className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-            type="button"
-            onClick={handleAddTask}
+            type="submit"
           >
             Add Task
           </button>
         </div>
       </div>
+      <ToastContainer position="bottom-center" />
     </form>
   );
 };

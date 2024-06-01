@@ -1,24 +1,53 @@
 /* eslint-disable no-unused-vars */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CiRead } from "react-icons/ci";
 import { MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin3Fill } from "react-icons/ri";
 import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 export const Crudtable = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    // Fetch users data from the backend when component mounts
+    async function fetchUsers() {
+      try {
+        const response = await axios.get("http://localhost:8000/api/readAll");
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    }
+
+    fetchUsers();
+  }, []);
 
   const handleAddUser = () => {
-    navigate('/addUser');
+    navigate("/addUser");
   };
 
-  const handleEditUser = () => {
-    navigate('/edit');
+  const handleEditUser = (task_id) => {
+    navigate(`/update/${task_id}`);
+    console.log(task_id);
   };
 
   const handleReadUser = () => {
-    navigate('/read');
+    navigate("/read");
+  };
+
+  const handleDeleteUser = async (task_id) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/delete/${task_id}`);
+      // Remove the deleted user from the local state
+      setUsers(users.filter((user) => user._id !== task_id));
+      toast.success(`User deleted successfully`);
+    } catch (error) {
+      console.log("Error Deleting Task", error);
+    }
   };
 
   return (
@@ -46,36 +75,35 @@ export const Crudtable = () => {
           </tr>
         </thead>
         <tbody className="text-gray-700">
-          <tr>
-            <td className="border px-4 py-2 text-center">1</td>
-            <td className="border px-4 py-2">Jean Marc</td>
-            <td className="border px-4 py-2">Louis</td>
-            <td className="border px-4 py-2">someusername@gmail.com</td>
-            <td className="border px-4 py-2">123 Main Street, Anytown, USA 12345</td>
-            <td className="border px-4 py-2">Sample Description</td>
-            <td className="border px-4 py-2 flex items-center justify-center">
-              {/* Read User Button */}
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-2"
-                onClick={handleReadUser}
-              >
-                <CiRead />
-              </button>
-              {/* Edit User Button */}
-              <button
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded mr-2"
-                onClick={handleEditUser}
-              >
-                <MdModeEditOutline />
-              </button>
-              {/* Delete User Button */}
-              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
-                <RiDeleteBin3Fill />
-              </button>
-            </td>
-          </tr>
+          {users.map((user, index) => (
+            <tr key={user}>
+              <td className="border px-4 py-2 text-center">{index + 1}</td>
+              <td className="border px-4 py-2">{user.Name}</td>
+              <td className="border px-4 py-2">{user.User_name}</td>
+              <td className="border px-4 py-2">{user.Email}</td>
+              <td className="border px-4 py-2">{user.Address}</td>
+              <td className="border px-4 py-2">{user.Desc}</td>
+              <td className="border px-4 p-2 flex items-center justify-center mt-3 border-none">
+                {/* Edit User Button */}
+                <button
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded mr-2 transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
+                  onClick={() => handleEditUser(user._id)}
+                >
+                  <MdModeEditOutline />
+                </button>
+                {/* Delete User Button */}
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded transition ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 hover:bg-indigo-500 duration-300"
+                  onClick={() => handleDeleteUser(user._id)}
+                >
+                  <RiDeleteBin3Fill />
+                </button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
+      <ToastContainer position="top-center" />
     </div>
   );
 };

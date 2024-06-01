@@ -12,7 +12,7 @@ export const create = async (req, res, next) => {
           savedData.push(savedItem);
         } catch (error) {
           handleDuplicateKeyError(res, error);
-          return; 
+          return;
         }
       }
     } else {
@@ -22,7 +22,7 @@ export const create = async (req, res, next) => {
         savedData.push(savedItem);
       } catch (error) {
         handleDuplicateKeyError(res, error);
-        return; 
+        return;
       }
     }
 
@@ -46,7 +46,6 @@ const handleDuplicateKeyError = (res, error) => {
     });
   }
 };
-
 
 export const ReadAll = async (req, res, next) => {
   try {

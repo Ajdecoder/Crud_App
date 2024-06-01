@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import route from "./routes/userRout.js";
+import route from "./routes/user.Routes.js";
 
 const app = express();
 
@@ -26,6 +26,10 @@ mongoose
   })
   .catch((err) => {
     console.log(err);
+  });
+
+  app.get("/", (req, res) => {
+    res.send("Welcome to the homepage");
   });
 
 app.use("/api", route);
