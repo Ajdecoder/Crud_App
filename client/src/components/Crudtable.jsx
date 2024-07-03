@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { CiRead } from "react-icons/ci";
 import { MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin3Fill } from "react-icons/ri";
 import { IoMdAdd } from "react-icons/io";
@@ -44,7 +43,7 @@ export const Crudtable = () => {
       await axios.delete(`http://localhost:8000/api/delete/${task_id}`);
       // Remove the deleted user from the local state
       setUsers(users.filter((user) => user._id !== task_id));
-      toast.success(`User deleted successfully`);
+      toast.dismiss(`User deleted successfully`);
     } catch (error) {
       console.log("Error Deleting Task", error);
     }

@@ -174,7 +174,7 @@ export const AddTask = () => {
           </button>
         </div>
       </div>
-      <ToastContainer position="bottom-center" />
+      <ToastContainer position="right-bottom" />
     </form>
   );
 };

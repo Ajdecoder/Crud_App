@@ -1,0 +1,31 @@
+version: '3'
+services:
+  client:
+    build:
+      context: ./client
+    ports:
+      - "5173:5173"
+    command: npm run dev
+    depends_on:
+      - server
+    container_name: client-container
+
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb+srv://anujshrivastav530:dodhFtbD8t1hbhsE@mongocluster01.xzq9zsg.mongodb.net/CrudData
+    depends_on:
+      - db
+    container_name: server-container
+
+  db:
+    image: mongo
+    volumes:
+      - mongo-data:/data/db
+    container_name: db-container
+
+volumes:
+  mongo-data:

@@ -1,48 +1,15 @@
-import User from "../model/userModal.js";
+import User, { Profile } from "../model/userModal.js";
+import bcrypt from "bcrypt";
 
 export const create = async (req, res, next) => {
+  const userData = new User(req.body);
   try {
-    let savedData = [];
+    const savedItem = await userData.save();
 
-    if (Array.isArray(req.body)) {
-      for (const data of req.body) {
-        const userData = new User(data);
-        try {
-          const savedItem = await userData.save();
-          savedData.push(savedItem);
-        } catch (error) {
-          handleDuplicateKeyError(res, error);
-          return;
-        }
-      }
-    } else {
-      const userData = new User(req.body);
-      try {
-        const savedItem = await userData.save();
-        savedData.push(savedItem);
-      } catch (error) {
-        handleDuplicateKeyError(res, error);
-        return;
-      }
-    }
-
-    res.status(200).json(savedData);
+    res.status(200).json(savedItem);
   } catch (err) {
     res.status(500).json({
       message: err.message,
-    });
-  }
-};
-
-const handleDuplicateKeyError = (res, error) => {
-  if (error.code === 11000 && error.keyPattern) {
-    const field = Object.keys(error.keyPattern)[0];
-    res.status(400).json({
-      message: `${field} must be unique.`,
-    });
-  } else {
-    res.status(500).json({
-      message: error.message,
     });
   }
 };
@@ -116,5 +83,80 @@ export const Delete = async (req, res, next) => {
   } catch (error) {
     console.error("Error deleting user:", error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const Register = async (req, res) => {
+  const { email, password, cpassword } = req.body;
+
+  try {
+    const existingUser = await Profile.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already registered" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new Profile({
+      email,
+      password: hashedPassword,
+      cpassword: hashedPassword,
+    });
+    await newUser.save();
+
+    const token = await newUser.generateToken();
+
+    // Set JWT token in a cookie
+    res.cookie("jwttoken", token, {
+      httpOnly: true,
+    });
+
+    res.status(201).json({
+      message: "User registered successfully",
+      token: token,
+    });
+  } catch (err) {
+    console.error("Registration error:", err);
+    res
+      .status(500)
+      .json({ message: "Registration failed. Please try again later." });
+  }
+};
+
+export const Login = async (req, res, next) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await Profile.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Incorrect password" });
+    }
+
+    const token = await user.generateToken();
+
+    // Set JWT token in a cookie
+    res.cookie("authtoken", token, {
+      httpOnly: true,
+    });
+
+    // Send response with login details and token
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      id: user._id,
+      user: { name: user.name, email: user.email },
+      token: token,
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    return res
+      .status(500)
+      .json({ message: "Login failed. Please try again later." });
   }
 };

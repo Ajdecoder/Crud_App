@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import route from "./routes/user.Routes.js";
+import bcrypt from "bcrypt";
+import User from "./model/userModal.js";
 
 const app = express();
 
@@ -14,7 +16,7 @@ app.use(cors());
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
-const URL = process.env.MONGO_URL;
+const URL = process.env.Atlas_MONGO_URL;
 
 mongoose
   .connect(URL)
@@ -28,8 +30,9 @@ mongoose
     console.log(err);
   });
 
-  app.get("/", (req, res) => {
-    res.send("Welcome to the homepage");
-  });
+app.get("/", (req, res) => {
+  res.send("Hello from server");
+});
 
 app.use("/api", route);
+app.use("/users", route);
