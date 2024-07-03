@@ -10,4 +10,8 @@ lerna-debug.log*
 node_modules
 /node_modules
 dist
+docker-compose.yml
+dockerfile
+.dockerignore
+.env
 
