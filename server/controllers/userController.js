@@ -3,10 +3,24 @@ import bcrypt from "bcrypt";
 
 export const create = async (req, res, next) => {
   const userData = new User(req.body);
-  try {
-    const savedItem = await userData.save();
 
-    res.status(200).json(savedItem);
+  try {
+    const existingData = await User.findOne({
+      $or: [
+        { name: req.body.name },
+        { username: req.body.email },
+        { username: req.body.username },
+        { address: req.body.address },
+        { desc: req.body.desc },
+      ],
+    });
+
+    if (existingData) {
+      res.status(409).json("Data already exists");
+    } else {
+      const savedItem = await userData.save();
+      if (req.body.email) res.status(200).json(savedItem);
+    }
   } catch (err) {
     res.status(500).json({
       message: err.message,
@@ -111,6 +125,7 @@ export const Register = async (req, res) => {
     });
 
     res.status(201).json({
+      success: true,
       message: "User registered successfully",
       token: token,
     });
@@ -150,7 +165,7 @@ export const Login = async (req, res, next) => {
       success: true,
       message: "Login successful",
       id: user._id,
-      user: { name: user.name, email: user.email },
+      user: { email: user.email },
       token: token,
     });
   } catch (err) {

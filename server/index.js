@@ -4,8 +4,6 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import route from "./routes/user.Routes.js";
-import bcrypt from "bcrypt";
-import User from "./model/userModal.js";
 
 const app = express();
 

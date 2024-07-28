@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 const crudSchema = new mongoose.Schema({
   Name: {
