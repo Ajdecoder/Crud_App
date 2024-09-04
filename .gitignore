@@ -14,4 +14,4 @@ docker-compose.yml
 dockerfile
 .dockerignore
 .env
-
+.package-lock.json
