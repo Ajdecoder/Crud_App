@@ -29,7 +29,7 @@ mongoose
   });
 
 app.get("/", (req, res) => {
-  res.send("Hello from server");
+  res.send("Hello from updated server");
 });
 
 app.use("/api", route);

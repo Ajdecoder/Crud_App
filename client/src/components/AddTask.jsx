@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { PORT } from "./common";
 
 export const AddTask = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export const AddTask = () => {
 
     try {
      await axios.post(
-        "http://localhost:8000/api/create",
+        `${PORT}/api/create`,
         inpvalue
       );
       toast.success("Task added successfully!");
