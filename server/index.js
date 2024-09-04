@@ -10,10 +10,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors());  
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT_LOCAL || process.env.PORT_PRODUCTON;
 const URL = process.env.Atlas_MONGO_URL;
 
 mongoose
@@ -21,7 +21,7 @@ mongoose
   .then(() => {
     console.log("Connected to database");
     app.listen(PORT, () => {
-      console.log(`Server is running on port: ${PORT}`);
+      console.log(`Server is running on PORT: ${PORT}`);
     });
   })
   .catch((err) => {
