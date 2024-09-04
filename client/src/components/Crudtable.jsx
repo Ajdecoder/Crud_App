@@ -6,6 +6,7 @@ import { IoMdAdd } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { PORT } from "./common";
 
 export const Crudtable = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const Crudtable = () => {
     // Fetch users data from the backend when component mounts
     async function fetchUsers() {
       try {
-        const response = await axios.get("http://localhost:8000/api/readAll");
+        const response = await axios.get(`${PORT}/api/readAll`);
         setUsers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -40,7 +41,7 @@ export const Crudtable = () => {
 
   const handleDeleteUser = async (task_id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/delete/${task_id}`);
+      await axios.delete( `${PORT}/api/delete/${task_id}`);
       // Remove the deleted user from the local state
       setUsers(users.filter((user) => user._id !== task_id));
       toast.dismiss(`User deleted successfully`);
@@ -75,7 +76,7 @@ export const Crudtable = () => {
         </thead>
         <tbody className="text-gray-700">
           {users.map((user, index) => (
-            <tr key={user}>
+            <tr key={index}>
               <td className="border px-4 py-2 text-center">{index + 1}</td>
               <td className="border px-4 py-2">{user.Name}</td>
               <td className="border px-4 py-2">{user.User_name}</td>

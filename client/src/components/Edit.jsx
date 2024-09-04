@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { PORT } from "./common";
 
 export const EditUser = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export const EditUser = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/readOne/${task_id}`);
+      const response = await axios.get(`${PORT}/api/readOne/${task_id}`);
       setUser(response.data);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -39,7 +40,7 @@ export const EditUser = () => {
     e.preventDefault();
 
     try {
-      await axios.put(`http://localhost:8000/api/update/${task_id}`, user);
+      await axios.put(`${PORT}/api/update/${task_id}`, user);
       navigate("/");
     } catch (error) {
       console.error("Error updating user:", error);
