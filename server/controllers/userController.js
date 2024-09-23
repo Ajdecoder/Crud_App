@@ -1,26 +1,11 @@
 import User, { Profile } from "../model/userModal.js";
 import bcrypt from "bcrypt";
 
-export const create = async (req, res, next) => {
-  const userData = new User(req.body);
-
+export const create = async (req, res) => {
   try {
-    const existingData = await User.findOne({
-      $or: [
-        { name: req.body.name },
-        { username: req.body.email },
-        { username: req.body.username },
-        { address: req.body.address },
-        { desc: req.body.desc },
-      ],
-    });
-
-    if (existingData) {
-      res.status(409).json("Data already exists");
-    } else {
-      const savedItem = await userData.save();
-      if (req.body.email) res.status(200).json(savedItem);
-    }
+    const userData = new User(req.body);
+    const savedItem = await userData.save();
+   res.status(200).json(savedItem);
   } catch (err) {
     res.status(500).json({
       message: err.message,

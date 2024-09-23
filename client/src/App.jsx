@@ -7,16 +7,25 @@ import About from "./components/About";
 import { ReadUser } from "./components/ReadOne";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import { useContext, useState } from "react";
+import { DefaultHome } from "./components/Defaults/DefaultHome";
+import { AdminContext } from "./components/context/CrudTableContext";
 
 function App() {
+  const { edittableRights } = useContext(AdminContext);
+
   return (
     <Router>
       <div>
         <Navbar />
         <Routes>
-          <Route exact path="/" element={<Crudtable />} />
+          <Route
+            exact
+            path="/"
+            element={edittableRights ? <Crudtable /> : <DefaultHome />}
+          />
           <Route exact path="/addUser" element={<AddTask />} />
-          <Route exact path="/update/:task_id" element={<EditUser/>} />
+          <Route exact path="/update/:task_id" element={<EditUser />} />
           <Route exact path="/about" element={<About />} />
           <Route exact path="/read" element={<ReadUser />} />
           <Route exact path="/login" element={<Login />} />

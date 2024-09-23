@@ -8,8 +8,6 @@ route.get("/readAll", ReadAll)
 route.get("/readOne/:id", ReadOne)
 route.put("/update/:id", Update)
 route.delete("/delete/:id", Delete)
-
-
 route.post("/register", Register)
 route.post("/login", Login)
 

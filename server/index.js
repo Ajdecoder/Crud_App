@@ -10,10 +10,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());  
+app.use(cors());
 dotenv.config();
 
-const PORT = process.env.PORT_LOCAL || process.env.PORT_PRODUCTON;
+const PORT = 8000;
 const URL = process.env.Atlas_MONGO_URL;
 
 mongoose
