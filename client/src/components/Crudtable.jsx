@@ -13,7 +13,7 @@ export const Crudtable = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    // Fetch users data from the backend when component mounts
+    
     async function fetchUsers() {
       try {
         const response = await axios.get(`${PORT}/api/readAll`);
@@ -24,7 +24,7 @@ export const Crudtable = () => {
     }
 
     fetchUsers();
-  }, []);
+  }, [users]);
 
   const handleAddUser = () => {
     navigate("/addUser");

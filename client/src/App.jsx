@@ -6,13 +6,21 @@ import { AddTask } from "./components/AddTask";
 import About from "./components/About";
 import { ReadUser } from "./components/ReadOne";
 import Signup from "./components/Signup";
-import Login from "./components/Login";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DefaultHome } from "./components/Defaults/DefaultHome";
 import { AdminContext } from "./components/context/CrudTableContext";
+import LoginAdmin from "./components/Login";
 
 function App() {
-  const { edittableRights } = useContext(AdminContext);
+  const { edittableRights, seteditableRights } = useContext(AdminContext);
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("accessToken");
+
+    if (authToken) {
+      seteditableRights(true);
+    }
+  }, [edittableRights, seteditableRights]);
 
   return (
     <Router>
@@ -28,7 +36,7 @@ function App() {
           <Route exact path="/update/:task_id" element={<EditUser />} />
           <Route exact path="/about" element={<About />} />
           <Route exact path="/read" element={<ReadUser />} />
-          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/login" element={<LoginAdmin />} />
           <Route exact path="/signup" element={<Signup />} />
         </Routes>
       </div>

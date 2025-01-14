@@ -2,15 +2,15 @@ import React, { createContext, useState } from "react";
 
 const AdminContext = createContext();
 
-export const CrudTableContext = ({children}) => {
+export const CrudTableContext = ({ children }) => {
 
-  const [edittableRights, setEditTableRights] = useState(false);
+  const [edittableRights, seteditableRights] = useState(false);
 
   return (
-    <AdminContext.Provider value={{ edittableRights }}>
+    <AdminContext.Provider value={{ edittableRights, seteditableRights }}>
       {children}
     </AdminContext.Provider>
-  );
+  )
 };
 
 export { AdminContext };

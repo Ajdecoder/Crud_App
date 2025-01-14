@@ -1,6 +1,7 @@
 import User, { Profile } from "../model/userModal.js";
 import bcrypt from "bcrypt";
 
+
 export const create = async (req, res) => {
   try {
     const userData = new User(req.body);
@@ -86,10 +87,11 @@ export const Delete = async (req, res, next) => {
 };
 
 export const Register = async (req, res) => {
-  const { email, password, cpassword } = req.body;
+  const { email, password } = req.body;
 
   try {
     const existingUser = await Profile.findOne({ email });
+
     if (existingUser) {
       return res.status(400).json({ message: "User already registered" });
     }
@@ -98,7 +100,6 @@ export const Register = async (req, res) => {
     const newUser = new Profile({
       email,
       password: hashedPassword,
-      cpassword: hashedPassword,
     });
     await newUser.save();
 
@@ -107,6 +108,7 @@ export const Register = async (req, res) => {
     // Set JWT token in a cookie
     res.cookie("jwttoken", token, {
       httpOnly: true,
+      withCredential:true
     });
 
     res.status(201).json({
@@ -115,6 +117,7 @@ export const Register = async (req, res) => {
       token: token,
     });
   } catch (err) {
+
     console.error("Registration error:", err);
     res
       .status(500)
@@ -125,7 +128,7 @@ export const Register = async (req, res) => {
 export const Login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  try {
+  try { 
     const user = await Profile.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -143,6 +146,7 @@ export const Login = async (req, res, next) => {
     // Set JWT token in a cookie
     res.cookie("authtoken", token, {
       httpOnly: true,
+      withCredential:true
     });
 
     // Send response with login details and token

@@ -1,7 +1,11 @@
-import React from 'react'
+import { createContext } from 'react'
 
-export default function auth() {
+const auth = createContext(authContext)
+
+export default function authContext() {
   return (
-    <div>auth</div>
+
+    authContext
+
   )
 }
