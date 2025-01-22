@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
@@ -28,10 +28,7 @@ export const AddTask = () => {
     e.preventDefault();
 
     try {
-     await axios.post(
-        `${PORT}/api/create`,
-        inpvalue
-      );
+      await axios.post(`${PORT}/api/create`, inpvalue);
       toast.success("Task added successfully!");
       navigate("/");
     } catch (error) {
