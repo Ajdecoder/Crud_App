@@ -138,7 +138,7 @@ export const Login = async (req, res, next) => {
     if (!passwordMatch) {
       return res
         .status(401)
-        .json({ success: false, message: "Incorrect password" });
+        .json({ success: false, message: "Incorrect Username Or Password" });
     }
 
     const token = await user.generateToken();
