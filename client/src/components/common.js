@@ -1,4 +1,14 @@
+// config.js or constants.js
 export const PORT_LOCAL = "http://localhost:8000";
-export const PORT_PRODUCTON = import.meta.env.VITE_PORT_PRODUCTON;
+export const PORT_PRODUCTION = import.meta.env.VITE_PORT_PRODUCTION; // Fixed typo in PRODUCTION
 
-export const PORT = PORT_PRODUCTON && import.meta.env.MODE === 'production' ? PORT_PRODUCTON : PORT_LOCAL;
+// Better way to determine the API URL
+export const PORT = import.meta.env.MODE === 'production' 
+    ? import.meta.env.VITE_PORT_PRODUCTION 
+    : PORT_LOCAL;
+
+    
+
+// Add some debug logging
+console.log('Current Environment:', import.meta.env.MODE);
+console.log('API URL:', PORT);
