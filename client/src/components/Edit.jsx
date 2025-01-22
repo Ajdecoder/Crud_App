@@ -49,10 +49,10 @@ export const EditUser = () => {
 
   return (
     <form
-      className="max-w-md mx-auto p-4 pt-6 pb-8 bg-white rounded shadow-md"
+      className="max-w-md mx-auto p-4 pt-6 pb-8 bg-white rounded shadow-md  relative top-7"
       onSubmit={handleUpdateUser}
     >
-      <div className="mb-4">
+      <div className="mb-4 relative">
         <label
           className="block text-gray-700 text-sm font-bold mb-2"
           htmlFor="name"
