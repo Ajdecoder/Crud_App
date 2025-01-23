@@ -7,11 +7,29 @@ import route from "./routes/user.Routes.js";
 
 const app = express();
 
+dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:5173", credentials:true }));
-dotenv.config();
+
+const allowedOrigins = [
+  process.env.CLIENT_PRODUCTION,
+  "http://localhost:5173",
+  "http://localhost:3000",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 const PORT = 8000;
 const URL = process.env.Atlas_MONGO_URL;

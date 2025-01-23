@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PORT_LOCAL } from "./common";
+import { PORT } from "./common";
 
 function Signup() {
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ function Signup() {
                 toast.error("Passwords do not match."); 
                 return;
             }
-            const res = await axios.post(`${PORT_LOCAL}/users/register`, user,{
+            const res = await axios.post(`${PORT}/users/register`, user,{
               withCredentials: true,
             });
             setUser(res.data);

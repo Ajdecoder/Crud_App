@@ -6,7 +6,8 @@ export const PORT_PRODUCTION = import.meta.env.VITE_PORT_PRODUCTION; // Fixed ty
 export const PORT = import.meta.env.MODE === 'production' 
     ? import.meta.env.VITE_PORT_PRODUCTION 
     : PORT_LOCAL;
-
+    
+    console.log(import.meta.env.VITE_PORT_PRODUCTION)
     
 
 // Add some debug logging
